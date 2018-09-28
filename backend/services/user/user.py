@@ -6,6 +6,7 @@ from . import bp_user
 
 import time
 import datetime
+import json
 
 time_format = "%Y-%m-%d"
 
@@ -71,7 +72,9 @@ def get_user_order():
             info["person_count"] = order.person_count
             info["shop_phone"] = order.shop_phone
             info["total_box_fee"] = order.total_box_fee
-            goods = eval(order.goods_list)
+            # goods = eval(order.goods_list)
+            info["goods1"] = eval(order.goods_list)
+            goods = json.loads(order.goods_list)
             info["goods"] = goods
             order_local = query_from_argument(Order, {"order_num": order.order_num}).first()
             if order_local:
@@ -111,11 +114,17 @@ def get_all_orders():
             info["add_time"] = order.add_time
             info["pay_time"] = order.pay_time
             info["sender_phone"] = order.sender_phone
+            info["sender_name"] =  "-"
+            info["sender_sex"] = "-"
+            info["shop_address"] = "-"
             address_json = eval(order.address_json)
             sender = query_from_argument(Dining_sender, {"id": order.sender_id}).first()
             if sender:
                 info["sender_name"] = sender.true_name
                 info["sender_sex"] = ("male" if sender.sex ==1 else "female")
+            shop = query_from_argument(Dining_shop, {"id": g.shop_id}).first()
+            if shop:
+                info["shop_address"] = shop.address
             info["user_name"] = address_json.get("call_name")
             info["user_phone"] = address_json.get("phone")
             info["user_address"] = address_json.get("address")
@@ -156,11 +165,17 @@ def get_printed_orders():
             info["add_time"] = order.add_time
             info["pay_time"] = order.pay_time
             info["sender_phone"] = order.sender_phone
+            info["sender_name"] =  "-"
+            info["sender_sex"] = "-"
+            info["shop_address"] = "-"
             address_json = eval(order.address_json)
             sender = query_from_argument(Dining_sender, {"id": order.sender_id}).first()
             if sender:
                 info["sender_name"] = sender.true_name
                 info["sender_sex"] = ("male" if sender.sex ==1 else "female")
+            shop = query_from_argument(Dining_shop, {"id": g.shop_id}).first()
+            if shop:
+                info["shop_address"] = shop.address
             info["user_name"] = address_json.get("call_name")
             info["user_phone"] = address_json.get("phone")
             info["user_address"] = address_json.get("address")
