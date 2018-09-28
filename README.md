@@ -3,9 +3,10 @@
 
 接口（1）：登录
     url:    http://47.99.143.9:10002/resource/user/sign_in
-params: 参数
+    
+    params: 参数
             {
-              "phone": ""    // string
+              "phone": ""    
             }
             
     正确返回示例： (登录成功接口，在after_request的hook中去除相关信息，如果前端需要，也可以给出)
@@ -28,7 +29,9 @@ params: 参数
             
             
  接口（2）：获取当日未打印的订单列表信息
+ 
     url: http://47.99.143.9:10002/resource/user/get_user_order
+    
     params: 空
           {
           }
@@ -74,8 +77,11 @@ params: 参数
           
           
   接口（3）：获取已经打印的订单列表信息
+  
       url： http://47.99.143.9:10002/resource/user/get_printed_orders
+      
       params： kong
+      
       返回示例：
          {
             "re" : "200",
@@ -116,7 +122,9 @@ params: 参数
           }
           
  接口（4） ：打印订单（用来过滤打印订单）
+ 
         url: http://47.99.143.9:10002/resource/user/print_order
+        
         params: 
             {
               "order_num": ""    // string  订单号
@@ -131,7 +139,9 @@ params: 参数
             
             
   接口（5）： 获取当日所有订单列表信息
+  
         url: http://47.99.143.9:10002/resource/user/print_order
+        
         params:
           {
              "startNum": "",
