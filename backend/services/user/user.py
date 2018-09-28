@@ -52,7 +52,7 @@ def get_user_order():
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
             info["pay_time"] = order.pay_time
-            info["sender_phone"] = order.sender_phone
+            info["sender_phone"] = (order.sender_phone if order.sender_phone else "-")
             info["sender_name"] =  "-"
             info["sender_sex"] = "-"
             info["shop_address"] = "-"
@@ -72,9 +72,14 @@ def get_user_order():
             info["person_count"] = order.person_count
             info["shop_phone"] = order.shop_phone
             info["total_box_fee"] = order.total_box_fee
+            info["status"] = order.status
             # goods = eval(order.goods_list)
             # info["goods1"] = eval(order.goods_list)
             goods = json.loads(order.goods_list)
+            total_price = 0
+            for good in goods:
+                total_price += float(good.get("total_price","0"))
+            info["price"] = total_price + float(order.fee)
             info["goods"] = goods
             order_local = query_from_argument(Order, {"order_num": order.order_num}).first()
             if order_local:
@@ -113,7 +118,7 @@ def get_all_orders():
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
             info["pay_time"] = order.pay_time
-            info["sender_phone"] = order.sender_phone
+            info["sender_phone"] = (order.sender_phone if order.sender_phone else "-")
             info["sender_name"] =  "-"
             info["sender_sex"] = "-"
             info["shop_address"] = "-"
@@ -133,7 +138,12 @@ def get_all_orders():
             info["person_count"] = order.person_count
             info["shop_phone"] = order.shop_phone
             info["total_box_fee"] = order.total_box_fee
-            goods = eval(order.goods_list)
+            info["status"] = order.status
+            goods = json.loads(order.goods_list)
+            total_price = 0
+            for good in goods:
+                total_price += float(good.get("total_price","0"))
+            info["price"] = total_price + float(order.fee)
             info["goods"] = goods
             data.append(info)
     return jsonify({"re": "200", "msg": "success", "data": {"detail":data, "total_num": total_num}})
@@ -164,7 +174,7 @@ def get_printed_orders():
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
             info["pay_time"] = order.pay_time
-            info["sender_phone"] = order.sender_phone
+            info["sender_phone"] = (order.sender_phone if order.sender_phone else "-")
             info["sender_name"] =  "-"
             info["sender_sex"] = "-"
             info["shop_address"] = "-"
@@ -184,7 +194,12 @@ def get_printed_orders():
             info["person_count"] = order.person_count
             info["shop_phone"] = order.shop_phone
             info["total_box_fee"] = order.total_box_fee
-            goods = eval(order.goods_list)
+            info["status"] = order.status
+            goods = json.loads(order.goods_list)
+            total_price = 0
+            for good in goods:
+                total_price += float(good.get("total_price","0"))
+            info["price"] = total_price + float(order.fee)
             info["goods"] = goods
             data.append(info)
     return jsonify({"re": "200", "msg": "success", "data": data})
