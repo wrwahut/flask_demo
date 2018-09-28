@@ -3,7 +3,7 @@
 
 接口（1）：登录
     url:    http://47.99.143.9:10002/resource/user/sign_in
-    params: 参数
+params: 参数
             {
               "phone": ""    // string
             }
