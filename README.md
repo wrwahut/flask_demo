@@ -143,7 +143,7 @@
             
   接口（5）： 获取当日所有订单列表信息
   
-        url: http://47.99.143.9:10002/resource/user/print_order
+        url: http://47.99.143.9:10002/resource/user/get_all_orders
         
         params:
           {
