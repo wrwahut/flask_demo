@@ -73,7 +73,7 @@ def get_user_order():
             info["shop_phone"] = order.shop_phone
             info["total_box_fee"] = order.total_box_fee
             # goods = eval(order.goods_list)
-            info["goods1"] = eval(order.goods_list)
+            # info["goods1"] = eval(order.goods_list)
             goods = json.loads(order.goods_list)
             info["goods"] = goods
             order_local = query_from_argument(Order, {"order_num": order.order_num}).first()
