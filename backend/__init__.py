@@ -5,7 +5,8 @@ import time
 from uuid import uuid1
 from flask import g, request, jsonify, make_response, json
 from extensions import db, socketio
-from backend.common import Redisi
+# from backend.common import Redisi
+from backend.common import query_from_argument, query_from_json, error_handler, Redisi
 from backend.models import *
 
 no_token = ["sign_in"]
@@ -17,6 +18,7 @@ def before_request():
     print "###########################funcName=", funcName
     phone = request.json.get("phone","")
     data = get_user_Info(phone)
+    print "@@@@@@@@@@@@@@@@@@@@@@",data
     g.phone = data.get("phone", "")
     g.user_id = data.get("user_id", "")
     g.shop_id = data.get("shop_id", "")
