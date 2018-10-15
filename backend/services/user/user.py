@@ -30,7 +30,8 @@ def sign_in():
             user = query_from_argument(Base_user, {"id": shop.user_id}).first()
             if user:
                 token_data["shop_id"] = user.shop_id
-            return jsonify({"re": "200", "msg": "success", "data": {"data": {}, "token": token_data}})
+            return jsonify({"re": "200", "msg": "success", "data": {}})
+            # return jsonify({"re": "200", "msg": "success", "data": {"data": {}, "token": token_data}})
         return jsonify({"re": "404", "msg": "phone_none", "data": {}})
     return jsonify({"re": "402", "msg": "param_error", "data": {}})
 
