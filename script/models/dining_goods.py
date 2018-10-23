@@ -4,7 +4,8 @@ from .base import CRUD
 from . import db
 
 class Dining_goods(CRUD,db.Model):
-    __bind_key__ = "dining_goods"
+    __tablename__ = "dining_goods"
+    # __bind_key__ = "dining_goods"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.VARCHAR(255))

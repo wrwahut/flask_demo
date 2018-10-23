@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import traceback
 import redis
+from sqlalchemy.ext.declarative import declarative_base
 
 
 db_online = {
@@ -17,9 +18,7 @@ db_online = {
 }
 
 engine = None
-engine2 = None
 session_factory = None
-session_factory2 = None
 conf = None
 inited = False
 env1 = None
@@ -33,15 +32,15 @@ def init(env):
         return  ""
     print "DB initing....",env
     global engine
-    # global engine2
+    global engine2
     global session_factory
-    # global session_factory2
+    global session_factory2
     global conf
     conf = eval("db_" + env)
-    # engine = create_engine(conf["db_connect_string"], echo=False, pool_size=10, max_overflow=0, pool_recycle=3600)
     engine = create_engine(conf["db_dining"], echo=False, pool_size=10, max_overflow=0, pool_recycle=3600)
+    engine2 = create_engine(conf["db_connect_string"], echo=False, pool_size=10, max_overflow=0, pool_recycle=3600)
     session_factory = sessionmaker(bind=engine)
-    # session_factory2 = sessionmaker(bind=engine2)
+    session_factory2 = sessionmaker(bind=engine2)
     inited = True
 
 def close():
@@ -64,3 +63,22 @@ def sessionhandler(func):
         return re
     return wrapper
 
+def close2():
+    session_factory2.close_all()
+
+def sessionhandler2(func):
+    def wrapper(*args, **kwargs):
+        try:
+            ls = scoped_session(session_factory2)
+            kwargs["session"] = ls
+            re = func(*args, **kwargs)
+            ls.flush()
+            ls.commit()
+        except Exception,e:
+            traceback.print_exc()
+            ls.rollback()
+            re = {"re": "500", "msg": str(e)}
+        finally:
+            ls.remove()
+        return re
+    return wrapper 

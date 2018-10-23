@@ -35,6 +35,7 @@ class Dining_order(CRUD,db.Model):
     is_sender_delete = db.Column(db.Integer)
     is_plat_delete = db.Column(db.Integer)
     add_time = db.Column(db.VARCHAR(255))
+    pay_time = db.Column(db.VARCHAR(255))
     is_comment = db.Column(db.Integer, default=0)
     min = db.Column(db.FLOAT)
     real_money = db.Column(db.FLOAT)

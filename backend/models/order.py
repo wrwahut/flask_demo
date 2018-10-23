@@ -12,3 +12,5 @@ class Order(CRUD,db.Model):
     ctime = db.Column(db.Integer)
     utime = db.Column(db.Integer)
     order_num = db.Column(db.VARCHAR(255))
+    index = db.Column(db.Integer)
+    pay_time = db.Column(db.VARCHAR(50))

@@ -159,6 +159,13 @@ def print_order():
         order.change_data({"status": 1})
     return jsonify({"re": "200", "msg": "success", "data": {}})
 
+@bp_user.route("/send_jpush", methods=["POST"])
+@error_handler
+def send_jpush():
+    args = request.json
+    print "@@@@@@@@@@@@@@@@@@", args.get("shop_id"), "@@@@@@@@@@@@@@@@@@@@@@",args.get("order_num")
+    return jsonify({"re": "200", "msg": "success", "data": {}})
+
 @bp_user.route("/get_printed_orders", methods=["POST"])
 @error_handler
 def get_printed_orders():
