@@ -45,6 +45,7 @@ def get_order_local(shop_id, order_num, session=None):
 
 
 if __name__ == "__main__":
+    # Caller("send_jpush", {"shop_id": 173, "order_num": "23432422"}).post_req()
     env = "online"
     script_config.init(env)
     try:

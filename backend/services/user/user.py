@@ -14,7 +14,8 @@ time_format = "%Y-%m-%d"
 @error_handler
 def user_init():
     args = request.json
-    print "%%%%%%%%%%%%%", g.phone, g.user_id, g.shop_id
+    # print "%%%%%%%%%%%%%", g.phone, g.user_id, g.shop_id
+    db.create_all()
     return jsonify({"re": "200", "msg": "success", "data": {}})
 
 @bp_user.route("/sign_in", methods=["POST"])

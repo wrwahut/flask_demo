@@ -16,12 +16,13 @@ def before_request():
     g.path = request.path
     funcName =  g.path.split("/")[-1]
     print "###########################funcName=", funcName
-    phone = request.json.get("phone","")
-    data = get_user_Info(phone)
-    print "@@@@@@@@@@@@@@@@@@@@@@",data
-    g.phone = data.get("phone", "")
-    g.user_id = data.get("user_id", "")
-    g.shop_id = data.get("shop_id", "")
+    if not funcName in ["user_init"]:
+        phone = request.json.get("phone","")
+        data = get_user_Info(phone)
+        print "@@@@@@@@@@@@@@@@@@@@@@",data
+        g.phone = data.get("phone", "")
+        g.user_id = data.get("user_id", "")
+        g.shop_id = data.get("shop_id", "")
     # if not funcName in no_token:
     #     cookie = dict(request.cookies)
     #     token = cookie.get("token", "")
