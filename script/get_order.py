@@ -16,7 +16,7 @@ time_format = "%Y-%m-%d"
 @script_config.sessionhandler
 def main(session=None):
     now = datetime.datetime.fromtimestamp(time.time()).strftime(time_format)
-    orders = session.query(Dining_order).filter(Dining_order.status.in_(tuple([3,4])))
+    orders = session.query(Dining_order).filter(Dining_order.status.in_(tuple([3,4,5])))
     orders = orders.filter(Dining_order.pay_time.like("%" + now + "%"))
     orders = orders.order_by(Dining_order.id.asc())
     orders = orders.all()

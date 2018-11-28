@@ -18,6 +18,31 @@ def user_init():
     db.create_all()
     return jsonify({"re": "200", "msg": "success", "data": {}})
 
+@bp_user.route("/update_push_cid", methods=["POST", "GET"])
+@error_handler
+def update_push_cid():
+    args = request.json
+    if args.get("phone","") and args.get("cid",""):
+        return jsonify({"re": "402", "param_error", "data": {}})
+    query = {"phone": args["phone"]}
+    shop = query_from_argument(Dining_shop, query).first()
+    if shop:
+        query["user_id"] = shop.user_id
+        # query["cid"] = args["cid"]
+        user = query_from_argument(Base_user, {"id": shop.user_id}).first()
+        if user:
+            query["shop_id"] = user.shop_id
+        push_info = query_from_argument(User, query).first()
+        if push_info:
+            push_info.change_data({"cid": args["cid"]})
+        else:
+            push_info = User()
+            query["cid"] = args["cid"]
+            push_info.init(query)
+        return jsonify({"re": "200", "msg": "success", "data": {}})
+    return jsonify({"re": "404", "msg": "no_shop", "data": {}})
+        
+
 @bp_user.route("/sign_in", methods=["POST"])
 @error_handler
 def sign_in():
