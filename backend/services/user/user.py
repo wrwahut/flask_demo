@@ -23,7 +23,7 @@ def user_init():
 def update_push_cid():
     args = request.json
     if args.get("phone","") and args.get("cid",""):
-        return jsonify({"re": "402", "param_error", "data": {}})
+        return jsonify({"re": "402", "msg": "param_error", "data": {}})
     query = {"phone": args["phone"]}
     shop = query_from_argument(Dining_shop, query).first()
     if shop:
