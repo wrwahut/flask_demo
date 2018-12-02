@@ -9,8 +9,8 @@ class User(CRUD,db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.CHAR(200), unique=True)
-    username = db.Column(db.CHAR(200), unique=True)
-    age = db.Column(db.Integer)
-    email = db.Column(db.CHAR(200))
+    phone = db.Column(db.CHAR(200), unique=True)
+    shop_id = db.Column(db.CHAR(200),unique=True)
+    user_id = db.Column(db.CHAR(200),unique=True)
+    cid = db.Column(db.CHAR(200))
     data = db.Column(db.JSON)
-    sex = db.Column(db.CHAR(20))

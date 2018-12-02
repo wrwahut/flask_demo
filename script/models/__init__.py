@@ -11,3 +11,4 @@ from dining_order import Dining_order
 from dining_sender import Dining_sender
 from dining_goods import Dining_goods
 from order import Order
+from user import User
