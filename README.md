@@ -34,15 +34,20 @@
  
     url: http://47.99.143.9:10002/resource/user/get_user_order
     
-    params: 空
+    params: 
           {
+            "phone":"",
+            "startNum": "", // string   分页开始索引
+            "pageSize": "   // string   分页每页个数
           }
           
     返回示例：
           {
             "re" : "200",
             "msg": "success",
-            "data": [
+            "data":{
+            "total_num": 100,
+            "detail": [
               {
                 "add_time": "2018-09-28 14:47:23",    // string   下单时间
                 "fee": "0.9",                         // string   配送费
@@ -76,6 +81,7 @@
                 "user_phone": "18155485553"                 // string  收获电话
               }
             ]
+            }
           }
           
           
@@ -83,12 +89,18 @@
   
       url： http://47.99.143.9:10002/resource/user/get_printed_orders
       
-      params： kong
+      params： {
+            "phone": "",
+            "startNum": "", // string   分页开始索引
+            "pageSize": "   // string   分页每页个数
+      }
       
       返回示例：
          {
             "re" : "200",
             "msg": "success",
+            "detail":{
+            "total_num": 100,
             "data": [
               {
                 "add_time": "2018-09-28 14:47:23",
@@ -123,6 +135,7 @@
                 "user_phone": "18155485553"
               }
             ]
+            }
           }
           
  接口（4） ：打印订单（用来过滤打印订单）
@@ -131,6 +144,7 @@
         
         params: 
             {
+             "phone": "",
               "order_num": ""    // string  订单号
             }
             
@@ -148,6 +162,7 @@
         
         params:
           {
+             "phone": "",
              "startNum": "",
              "pageSize": ""
           }
