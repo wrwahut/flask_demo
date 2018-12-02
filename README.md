@@ -7,7 +7,8 @@
     
     params: 参数
             {
-              "phone": ""    
+              "phone": "",
+              "cid": "",
             }
             
     正确返回示例： (登录成功接口，在after_request的hook中去除相关信息，如果前端需要，也可以给出)
