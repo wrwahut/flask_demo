@@ -14,7 +14,6 @@ time_format = "%Y-%m-%d"
 @error_handler
 def user_init():
     args = request.json
-    # print "%%%%%%%%%%%%%", g.phone, g.user_id, g.shop_id
     db.create_all()
     return jsonify({"re": "200", "msg": "success", "data": {}})
 
@@ -135,20 +134,18 @@ def get_user_order():
 @error_handler
 def get_all_orders():
     args = request.json
-    # args = {}
-    # args["startNum"] = "0"
-    # args["pageSize"] = "10"
     data = []
     total_num = 0
     now = datetime.datetime.fromtimestamp(time.time()).strftime(time_format)
-    orders = query_from_argument(Dining_order, {"shop_id": g.shop_id}).filter(Dining_order.status.in_(tuple([3,4,5])))
-    orders = orders.filter(Dining_order.pay_time.like("%" + now + "%"))
-    total_num = orders.count()
-    orders = orders.order_by(Dining_order.id.desc()).offset(int(args["startNum"])).limit(args["pageSize"])
-    orders = orders.all()
-    if orders:
-        for order in orders:
+    local_orders = query_from_argument(Order, {"shop_id": g.shop_id}).filter(Order.pay_time == now)
+    total_num = local_orders.count()
+    local_orders = local_orders.order_by(Order.id.desc()).offset(int(args["startNum"])).limit(args["pageSize"])
+    local_orders = local_orders.all()
+    for local_order in local_orders:
+        order = query_from_argument(Dining_order, {"shop_id": g.shop_id, "order_num": local_order.order_num}).first()
+        if order:
             info = {}
+            info["index"] = local_order.index
             info["order_num"] = order.order_num
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
@@ -200,13 +197,17 @@ def print_order():
 def get_printed_orders():
     args = request.json
     data = []
-    today = str(datetime.date.today()) + "  00:00:00"
-    today_ctime = handler_time(today)
-    local_orders = query_from_argument(Order, {"shop_id": g.shop_id, "status": 1}).filter(Order.ctime > today_ctime).all()
+    total_num = 0
+    now = datetime.datetime.fromtimestamp(time.time()).strftime(time_format)
+    local_orders = query_from_argument(Order, {"shop_id": g.shop_id, "status": 1}).filter(Order.pay_time == now)
+    total_num = local_orders.count()
+    local_orders = local_orders.order_by(Order.id.desc()).offset(int(args["startNum"])).limit(args["pageSize"])
+    local_orders = local_orders.all()
     for local_order in local_orders:
         order = query_from_argument(Dining_order, {"shop_id": g.shop_id, "order_num": local_order.order_num}).first()
         if order:
             info = {}
+            info["index"] = local_order.index
             info["order_num"] = order.order_num
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
@@ -239,7 +240,7 @@ def get_printed_orders():
             info["price"] = total_price + float(order.fee)
             info["goods"] = goods
             data.append(info)
-    return jsonify({"re": "200", "msg": "success", "data": data})
+    return jsonify({"re": "200", "msg": "success", "data": {"detail":data, "total_num": total_num}})
 
 def handler_time(dt):
     timeArray = time.strptime(dt, "%Y-%m-%d %H:%M:%S")
