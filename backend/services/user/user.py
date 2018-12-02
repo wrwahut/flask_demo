@@ -56,6 +56,14 @@ def sign_in():
             user = query_from_argument(Base_user, {"id": shop.user_id}).first()
             if user:
                 token_data["shop_id"] = user.shop_id
+            if args.get("cid"):
+                user_cid = query_from_argument(User, {"shop_id": user.shop_id}).first()
+                if user_cid:
+                    user_cid.change_data({"cid": args["cid"]})
+                else:
+                    user_cid = User()
+                    query_init = {"cid": args["cid"], "shop_id": user.shop_id, "user_id": shop.user_id}
+                    user_cid.init(query_init)
             return jsonify({"re": "200", "msg": "success", "data": {}})
             # return jsonify({"re": "200", "msg": "success", "data": {"data": {}, "token": token_data}})
         return jsonify({"re": "404", "msg": "phone_none", "data": {}})
