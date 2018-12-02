@@ -72,16 +72,17 @@ def sign_in():
 @error_handler
 def get_user_order():
     data = []
+    total_num = 0
     now = datetime.datetime.fromtimestamp(time.time()).strftime(time_format)
-    print "###########now = ", now
-    orders = query_from_argument(Dining_order, {"shop_id": g.shop_id})
-    orders = orders.filter(Dining_order.status.in_(tuple([3,4])))
-    orders = orders.filter(Dining_order.pay_time.like("%" + now + "%"))
-    orders = orders.order_by(Dining_order.id.desc())
-    orders = orders.all()
-    if orders:
-        for order in orders:
+    local_orders = query_from_argument(Order, {"shop_id": g.shop_id, "status": 0}).filter(Order.pay_time == now)
+    total_num = local_orders.count()
+    local_orders = local_orders.order_by(Order.id.desc()).offset(int(args["startNum"])).limit(args["pageSize"])
+    local_orders = local_orders.all()
+    for local_order in local_orders:
+        order = query_from_argument(Dining_order, {"shop_id": g.shop_id, "order_num": local_order.order_num}).first()
+        if order:
             info = {}
+            info["index"] = local_order.index
             info["order_num"] = order.order_num
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
@@ -107,28 +108,14 @@ def get_user_order():
             info["shop_phone"] = order.shop_phone
             info["total_box_fee"] = order.total_box_fee
             info["status"] = order.status
-            # goods = eval(order.goods_list)
-            # info["goods1"] = eval(order.goods_list)
             goods = json.loads(order.goods_list)
             total_price = 0
             for good in goods:
                 total_price += float(good.get("total_price","0"))
             info["price"] = total_price + float(order.fee)
             info["goods"] = goods
-            order_local = query_from_argument(Order, {"order_num": order.order_num}).first()
-            if order_local:
-                if order_local.status == 1:
-                    continue
-            else:
-                order_local = Order()
-                ctime = handler_time(order.add_time)
-                order_local.init({"status": 0, "order_num": order.order_num, "shop_id":g.shop_id, "ctime": ctime})
-
-            # print "@@@@@@@@@@@@@", order.user_id, "^^^^^^^",g.shop_id
-            # print "###############", goods
             data.append(info)
-            # break
-    return jsonify({"re": "200", "msg": "success", "data": data})
+    return jsonify({"re": "200", "msg": "success", "data": {"detail":data, "total_num": total_num}})
 
 @bp_user.route("/get_all_orders", methods=["POST"])
 @error_handler
