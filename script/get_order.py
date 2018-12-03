@@ -24,12 +24,13 @@ def main(session=None):
     orders = orders.all()
     if orders:
         for order in orders:
-            flag = get_order_local(order.shop_id, order.order_num)
+            flag, index = get_order_local(order.shop_id, order.order_num)
             if flag:
                 continue
             print "###################",order.id, "%%%%%%%%%%%%",order.order_num
             cid = get_user_cid(order.shop_id)
             info = {}
+            info["index"] = index
             info["order_num"] = order.order_num
             info["shop_name"] = order.shop_name
             info["add_time"] = order.add_time
@@ -71,14 +72,14 @@ def main(session=None):
 def get_order_local(shop_id, order_num, session=None):
     local_orders = session.query(Order).filter(Order.order_num == order_num).first()
     if local_orders:
-        return True
+        return True, local_orders.index
     else:
         now = datetime.datetime.fromtimestamp(time.time()).strftime(time_format)
         count_order = session.query(Order).filter(Order.shop_id == shop_id, Order.pay_time == now).count()
         order = Order()
         init_query = {"shop_id":shop_id, "order_num": order_num, "pay_time": now, "index": count_order+ 1}
         order.init(init_query, session)
-        return False
+        return False, count_order+ 1
 
 @script_config.sessionhandler2
 def get_user_cid(shop_id, session):
