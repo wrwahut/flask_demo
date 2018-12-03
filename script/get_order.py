@@ -64,7 +64,7 @@ def main(session=None):
             # cid = "8713dd61d415c9806bd3d3f3716a0293"
             if cid:
                 print ""
-                pushMessageToSingle(cid, info)
+                pushMessageToSingle(cid, json.dumps(info,"utf-8"))
             # Caller("send_jpush", {"shop_id": order.shop_id, "order_num": order.order_num}).post_req()
 
 @script_config.sessionhandler2
