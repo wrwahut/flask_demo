@@ -71,6 +71,7 @@ def sign_in():
 @bp_user.route("/get_user_order", methods=["POST"])
 @error_handler
 def get_user_order():
+    args = request.json
     data = []
     total_num = 0
     now = datetime.datetime.fromtimestamp(time.time()).strftime(time_format)
